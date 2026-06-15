@@ -9,24 +9,48 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', system-ui, sans-serif; }
+        
+        .presentation-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .presentation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
-    <div class="max-w-4xl mx-auto py-16 px-6">
-        <div class="text-center mb-16">
-            <h1 class="text-5xl font-bold mb-4">My Presentations</h1>
-            <p class="text-zinc-400 text-xl">Click on a presentation to open it</p>
+    <div class="max-w-4xl mx-auto py-12 px-6">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-3">My Presentations</h1>
+            <p class="text-zinc-400 text-lg">Find and open any presentation instantly</p>
         </div>
 
-        <div class="grid gap-6">
+        <!-- Search Bar -->
+        <div class="relative max-w-xl mx-auto mb-12">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-search text-zinc-500"></i>
+            </div>
+            <input 
+                type="text" 
+                id="searchInput"
+                placeholder="Search presentations... (e.g. C#, Git, Compiler)"
+                class="w-full bg-zinc-900 border border-zinc-700 focus:border-blue-500 rounded-2xl py-4 pl-12 pr-6 text-lg outline-none transition-colors"
+                onkeyup="filterPresentations()">
+        </div>
+
+        <div id="presentations" class="grid gap-6">
+            
             <!-- C# Presentation -->
             <a href="csharp-compiler-nuget.html" 
-               class="group bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-blue-500 rounded-3xl p-8 transition-all duration-300 flex items-center gap-6">
+               class="presentation-card group bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-blue-500 rounded-3xl p-8 flex items-center gap-6">
                 <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-4xl flex-shrink-0">
                     💻
                 </div>
                 <div class="flex-1">
-                    <h2 class="text-2xl font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                    <h2 class="text-2xl font-semibold mb-1 group-hover:text-blue-400 transition-colors">
                         C# Compiler & NuGet Packages
                     </h2>
                     <p class="text-zinc-400">Fundamentals explained simply for beginners</p>
@@ -36,12 +60,12 @@
 
             <!-- Git Presentation -->
             <a href="git-grundlagen.html" 
-               class="group bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded-3xl p-8 transition-all duration-300 flex items-center gap-6">
+               class="presentation-card group bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded-3xl p-8 flex items-center gap-6">
                 <div class="w-16 h-16 bg-orange-500/10 rounded-2xl flex items-center justify-center text-4xl flex-shrink-0">
                     <i class="fa-brands fa-git-alt"></i>
                 </div>
                 <div class="flex-1">
-                    <h2 class="text-2xl font-semibold mb-2 group-hover:text-orange-400 transition-colors">
+                    <h2 class="text-2xl font-semibold mb-1 group-hover:text-orange-400 transition-colors">
                         Git Grundlagen
                     </h2>
                     <p class="text-zinc-400">Einfach erklärt für Anfänger (German)</p>
@@ -52,8 +76,34 @@
 
         <div class="mt-16 text-center text-zinc-500 text-sm">
             <p>Made with ❤️ for learning purposes</p>
-            <p class="mt-2">GitHub Pages • June 2026</p>
+            <p class="mt-2">GitHub Pages</p>
         </div>
     </div>
+
+    <script>
+        function filterPresentations() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.presentation-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(input) || description.includes(input)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Clear search when pressing Escape
+        document.getElementById('searchInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                filterPresentations();
+            }
+        });
+    </script>
 </body>
 </html>
